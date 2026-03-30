@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice AI Dashboard - Login</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        surface: '#FFFFFF',
+                        background: '#f8fafc',
+                        bordercolor: '#e2e8f0',
+                        textMain: '#0f172a',
+                        textMuted: '#64748b'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-textMain min-h-screen font-sans antialiased flex items-center justify-center p-6">
+
+    <div id="login-container" class="bg-surface p-8 rounded-2xl border border-bordercolor shadow-xl w-full max-w-sm transition-transform">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-textMain mb-2">Welcome Back</h1>
+            <p class="text-sm text-textMuted">Sign in to Voice AI Dashboard</p>
+        </div>
+
+        <form id="login-form" class="space-y-5">
+            <div>
+                <label for="username" class="block text-sm font-medium text-textMain mb-1.5">Username</label>
+                <input type="text" id="username" class="w-full border border-bordercolor rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-gray-50/50" placeholder="Enter username" required>
+            </div>
+            
+            <div>
+                <label for="password" class="block text-sm font-medium text-textMain mb-1.5">Password</label>
+                <input type="password" id="password" class="w-full border border-bordercolor rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-gray-50/50" placeholder="••••••••" required>
+            </div>
+
+            <div id="error-msg" class="text-red-500 text-xs hidden text-center font-medium bg-red-50 py-2 rounded">Invalid username or password.</div>
+
+            <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors mt-2 shadow-sm">Sign In</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+            const container = document.getElementById('login-container');
+
+            if (user === 'admin' && pass === 'demo123') {
+                localStorage.setItem('isAuthenticated', 'true');
+                window.location.href = 'index.html';
+            } else {
+                errorMsg.classList.remove('hidden');
+                container.classList.add('animate-shake');
+                setTimeout(() => container.classList.remove('animate-shake'), 400);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice AI Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        surface: '#FFFFFF',
+                        background: '#f8fafc',
+                        bordercolor: '#e2e8f0',
+                        textMain: '#0f172a',
+                        textMuted: '#64748b',
+                        accentGreen: '#10b981',
+                        accentRed: '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Authentication Check -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body class="bg-background text-textMain min-h-screen font-sans antialiased text-sm">
+
+    <!-- Top Navigation Header -->
+    <nav class="bg-surface border-b border-bordercolor sticky top-0 z-50 shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+                    <i class="fa-solid fa-microphone-lines text-sm"></i>
+                </div>
+                <h1 class="text-lg font-bold text-textMain tracking-tight">HighLevel Voice AI Dashboard</h1>
+            </div>
+            <button onclick="logout()" class="flex items-center px-4 py-2 text-sm font-medium text-textMuted bg-surface hover:text-textMain hover:bg-gray-50 rounded-lg transition-colors border border-bordercolor shadow-sm">
+                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sign Out
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="max-w-[1600px] mx-auto p-6 space-y-6">
+
+        <!-- KPI Grid Top -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Total Calls -->
+            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                <div>
+                    <h3 class="text-textMuted text-xs font-medium mb-1">Total Calls</h3>
+                    <div class="flex items-end justify-between">
+                        <span id="kpi-total-calls" class="text-3xl font-semibold placeholder-glow w-16 h-9 rounded bg-gray-200"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Triggered -->
+            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                <div>
+                    <h3 class="text-textMuted text-xs font-medium mb-1">Actions Triggered</h3>
+                    <div class="flex items-end justify-between">
+                        <span id="kpi-actions" class="text-3xl font-semibold placeholder-glow w-16 h-9 rounded bg-gray-200"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sentiment -->
+            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                <div>
+                    <h3 class="text-textMuted text-xs font-medium mb-1">Sentiment</h3>
+                    <div class="flex items-end justify-between">
+                        <span id="kpi-sentiment" class="text-3xl font-semibold text-textMain">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Container -->
+        <div class="bg-surface p-5 rounded-xl border border-bordercolor shadow-sm">
+            <h3 class="text-textMuted text-xs font-medium mb-4">Calls Completed</h3>
+            <div class="w-full h-[280px] relative">
+                <canvas id="callsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- KPI Grid Bottom -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Total Duration -->
+            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-textMuted text-xs font-medium mb-1">Total Duration</h3>
+                        <span id="kpi-total-duration" class="text-2xl font-semibold placeholder-glow w-24 h-8 rounded bg-gray-200 block"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avg Duration -->
+            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-textMuted text-xs font-medium mb-1">Average Call duration</h3>
+                        <span id="kpi-avg-duration" class="text-2xl font-semibold placeholder-glow w-24 h-8 rounded bg-gray-200 block"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Filters -->
+        <div class="flex items-center justify-end space-x-3 mt-4">
+            <div class="flex items-center space-x-2">
+                <span class="text-xs font-medium text-textMuted">From:</span>
+                <input type="date" id="filter-startDate" class="border border-bordercolor rounded bg-surface px-3 py-1.5 text-xs text-textMain outline-none focus:border-primary transition-colors">
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs font-medium text-textMuted">To:</span>
+                <input type="date" id="filter-endDate" class="border border-bordercolor rounded bg-surface px-3 py-1.5 text-xs text-textMain outline-none focus:border-primary transition-colors">
+            </div>
+            <button id="apply-date-filter" class="px-4 py-1.5 bg-primary text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors shadow-sm">Apply</button>
+            <button id="clear-date-filter" class="px-4 py-1.5 bg-gray-100 text-textMain text-xs font-medium rounded hover:bg-gray-200 transition-colors border border-bordercolor shadow-sm">Clear</button>
+        </div>
+
+        <!-- Data Table -->
+        <div class="bg-surface rounded-xl border border-bordercolor shadow-sm overflow-hidden flex flex-col">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50/50 border-b border-bordercolor text-textMuted text-xs font-medium">
+                            <th class="px-6 py-4 whitespace-nowrap">Agent Name</th>
+                            <th class="px-6 py-4 whitespace-nowrap">Contact Name</th>
+                            <th class="px-6 py-4 whitespace-nowrap">Phone Number</th>
+                            <th class="px-6 py-4 whitespace-nowrap">Date and Time</th>
+                            <th class="px-6 py-4 whitespace-nowrap">Duration</th>
+                            <th class="px-6 py-4 whitespace-nowrap">Actions Triggered</th>
+                            <th class="px-6 py-4 whitespace-nowrap text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="text-sm divide-y divide-bordercolor">
+                        <!-- Skeletons will be generated here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="px-6 py-4 border-t border-bordercolor flex items-center justify-between text-xs bg-gray-50/30">
+                <span id="pagination-info" class="text-textMuted">Showing ... of ... results</span>
+                <div class="flex items-center space-x-1" id="pagination-controls">
+                    <!-- Controls will be generated here -->
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="data-modal" class="fixed inset-0 z-[100] bg-black/40 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200">
+        <!-- Modal Content -->
+        <div class="bg-surface w-full max-w-2xl rounded-xl shadow-xl transform scale-95 transition-transform duration-200" id="data-modal-content">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-bordercolor flex items-center justify-between">
+                <div>
+                    <h2 id="modal-title" class="text-lg font-semibold text-textMain">Modal Title</h2>
+                    <p id="modal-subtitle" class="text-xs text-textMuted mt-1 hidden">Your conversation with AI</p>
+                </div>
+                <button onclick="closeModal()" class="text-textMuted hover:text-textMain transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="px-6 py-5 max-h-[60vh] overflow-y-auto" id="modal-body-scroll">
+                <!-- Data pill -->
+                <div id="modal-pill" class="bg-blue-50 text-blue-600 text-xs font-medium px-4 py-2 rounded-lg mb-4 hidden">
+                    Translated Content (English)
+                </div>
+                
+                <!-- Content -->
+                <div id="modal-text" class="text-sm text-textMain leading-relaxed whitespace-pre-wrap">
+                    Modal Content
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="app.js"></script>
+</body>
+</html>
