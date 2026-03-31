@@ -1,7 +1,7 @@
 // Configuration based on the user's provided curl
 const API_URL = 'https://services.leadconnectorhq.com/voice-ai/dashboard/call-logs';
-const LOCATION_ID = 'wJ5RzgK5QWJOkfK65b06';
-const BEARER_TOKEN = 'pit-8e033401-0d39-47c6-bd36-40021c84b49c';
+const LOCATION_ID = '0BL2s1FXz9zqmSGr7yns';
+const BEARER_TOKEN = 'pit-b9cfd4b2-394a-4dc2-a5fe-08373f52bb96';
 const API_VERSION = '2021-04-15';
 
 // State
