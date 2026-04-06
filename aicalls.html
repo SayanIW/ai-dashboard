@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Calls - JarrettFord</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6',
+                        surface: '#18181b',
+                        background: '#09090b',
+                        bordercolor: '#27272a',
+                        textMain: '#ffffff',
+                        textMuted: '#a1a1aa',
+                        accentGreen: '#bef264',
+                        accentRed: '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css?v=3">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Authentication Check -->
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body class="bg-background text-textMain min-h-screen font-sans antialiased text-sm">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-surface border-r border-bordercolor flex flex-col sticky top-0 h-screen shadow-sm">
+            <div class="p-6 pb-2">
+                <div class="flex items-center space-x-3 mb-10">
+                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+                        <i class="fa-solid fa-microphone-lines text-sm"></i>
+                    </div>
+                    <h1 class="text-sm font-bold text-textMain tracking-tight">JarrettFord</h1>
+                </div>
+                
+                <nav class="space-y-1">
+                    <a href="index.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-chart-line w-5"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    
+                    <!-- AI Calls with Submenu -->
+                    <div class="space-y-1">
+                        <button onclick="toggleSubmenu('aicalls-submenu')" class="flex items-center w-full space-x-3 px-4 py-3 rounded-lg text-sm font-semibold bg-primary/10 text-primary transition-all">
+                            <i class="fa-solid fa-phone-volume w-5"></i>
+                            <span>AI Calls</span>
+                            <i id="aicalls-chevron" class="fa-solid fa-chevron-down ml-auto text-[10px] transition-transform duration-200" style="transform: rotate(180deg)"></i>
+                        </button>
+                        <div id="aicalls-submenu" class="pl-11 space-y-1 mt-1">
+                            <a href="aicalls.html?type=inbound" id="link-inbound" class="block py-2 text-sm text-textMuted hover:text-textMain transition-all">Inbound</a>
+                            <a href="aicalls.html?type=outbound" id="link-outbound" class="block py-2 text-sm text-textMuted hover:text-textMain transition-all">Outbound</a>
+                        </div>
+                    </div>
+
+                    <a href="leads.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-users w-5"></i>
+                        <span>Leads</span>
+                    </a>
+                    <a href="appointments.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-calendar-check w-5"></i>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="webchats.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-comment-dots w-5"></i>
+                        <span>Web Chats</span>
+                    </a>
+                    <a href="socialmessages.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-brands fa-facebook w-5"></i>
+                        <span>Social Messages</span>
+                    </a>
+                    <a href="agents.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-robot w-5"></i>
+                        <span>AI Agents</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <div class="mt-auto p-6 border-t border-bordercolor">
+                <button onclick="logout()" class="w-full flex items-center px-4 py-2.5 text-sm font-medium text-textMuted hover:text-accentRed transition-all">
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-3"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <header class="mb-8 flex justify-between items-end">
+                <div>
+                    <h2 id="page-title" class="text-2xl font-bold text-textMain">AI Calls</h2>
+                    <p id="page-subtitle" class="text-textMuted text-sm">Monitor your artificial intelligence conversations</p>
+                </div>
+                
+                <!-- Date Filters Moved to Header for cleaner look -->
+                <div class="flex items-center space-x-3 bg-surface p-2 rounded-lg border border-bordercolor">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] uppercase font-bold text-textMuted">From</span>
+                        <input type="date" id="filter-startDate" class="bg-transparent text-xs text-textMain outline-none">
+                    </div>
+                    <div class="w-px h-4 bg-bordercolor"></div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] uppercase font-bold text-textMuted">To</span>
+                        <input type="date" id="filter-endDate" class="bg-transparent text-xs text-textMain outline-none">
+                    </div>
+                    <button id="apply-date-filter" class="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded uppercase tracking-wider hover:opacity-90 transition-all shadow-sm">Apply</button>
+                    <button id="clear-date-filter" class="px-3 py-1 bg-white/10 text-textMain text-[10px] font-bold rounded uppercase tracking-wider hover:bg-white/20 transition-all border border-bordercolor">Clear</button>
+                </div>
+            </header>
+            
+            <div class="space-y-6">
+                <!-- Data Table -->
+                <div class="bg-surface rounded-xl border border-bordercolor shadow-sm overflow-hidden flex flex-col">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead style="background-color: #8b5cf6 !important; color: #ffffff !important;">
+                                <tr style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="border-b border-bordercolor text-xs font-bold uppercase tracking-wider">
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Agent Name</th>
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Contact Name</th>
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Phone Number</th>
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Date and Time</th>
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Duration</th>
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Actions Triggered</th>
+                                    <th style="background-color: #8b5cf6 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class="text-sm divide-y divide-bordercolor">
+                                <!-- Skeletons will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-bordercolor flex items-center justify-between text-xs bg-gray-50/30">
+                        <span id="pagination-info" class="text-textMuted">Showing ... of ... results</span>
+                        <div class="flex items-center space-x-1" id="pagination-controls">
+                            <!-- Controls will be generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="data-modal" class="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-all duration-200">
+        <div class="bg-surface w-full max-w-2xl rounded-2xl shadow-2xl transform scale-95 transition-all duration-200 border border-bordercolor overflow-hidden" id="data-modal-content">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-bordercolor flex items-center justify-between bg-surface/50">
+                <div>
+                    <h2 id="modal-title" class="text-lg font-bold text-textMain tracking-tight">Call Summary</h2>
+                    <p id="modal-subtitle" class="text-[10px] text-textMuted uppercase font-bold tracking-widest mt-1 hidden">Your conversation with AI</p>
+                </div>
+                <button onclick="closeModal()" class="text-textMuted hover:text-textMain transition-all w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="px-6 py-6 max-h-[70vh] overflow-y-auto custom-scrollbar" id="modal-body-scroll">
+                <!-- Data pill -->
+                <div id="modal-pill" class="inline-block bg-primary/10 text-primary text-[10px] font-bold uppercase px-3 py-1 rounded-full mb-4 hidden tracking-wider">
+                    Translated Content
+                </div>
+                
+                <!-- Content -->
+                <div id="modal-text" class="text-sm text-textMain leading-relaxed whitespace-pre-wrap">
+                    Modal Content
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="aicalls.js"></script>
+    <script>
+        function toggleSubmenu(id) {
+            const menu = document.getElementById(id);
+            const chevron = document.getElementById('aicalls-chevron');
+            menu.classList.toggle('hidden');
+            if (!menu.classList.contains('hidden')) {
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            window.location.href = 'login.html';
+        }
+
+        // Active state for sublinks
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type') || 'inbound';
+        if (type === 'inbound') {
+            document.getElementById('link-inbound').classList.add('text-primary', 'font-bold');
+            document.getElementById('page-title').textContent = 'AI Calls - Inbound';
+        } else {
+            document.getElementById('link-outbound').classList.add('text-primary', 'font-bold');
+            document.getElementById('page-title').textContent = 'AI Calls - Outbound';
+        }
+    </script>
+</body>
+</html>

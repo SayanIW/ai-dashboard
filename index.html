@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice AI Dashboard</title>
+    <title>JarrettFord Dashboard</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,13 +11,13 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2563EB',
-                        surface: '#FFFFFF',
-                        background: '#f8fafc',
-                        bordercolor: '#e2e8f0',
-                        textMain: '#0f172a',
-                        textMuted: '#64748b',
-                        accentGreen: '#10b981',
+                        primary: '#8b5cf6',
+                        surface: '#18181b',
+                        background: '#09090b',
+                        bordercolor: '#27272a',
+                        textMain: '#ffffff',
+                        textMuted: '#a1a1aa',
+                        accentGreen: '#bef264',
                         accentRed: '#ef4444'
                     },
                     fontFamily: {
@@ -30,7 +30,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome for Icons -->
@@ -44,132 +44,151 @@
 </head>
 <body class="bg-background text-textMain min-h-screen font-sans antialiased text-sm">
 
-    <!-- Top Navigation Header -->
-    <nav class="bg-surface border-b border-bordercolor sticky top-0 z-50 shadow-sm">
-        <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
-                    <i class="fa-solid fa-microphone-lines text-sm"></i>
-                </div>
-                <h1 class="text-lg font-bold text-textMain tracking-tight">HighLevel Voice AI Dashboard</h1>
-            </div>
-            <button onclick="logout()" class="flex items-center px-4 py-2 text-sm font-medium text-textMuted bg-surface hover:text-textMain hover:bg-gray-50 rounded-lg transition-colors border border-bordercolor shadow-sm">
-                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sign Out
-            </button>
-        </div>
-    </nav>
-
-    <!-- Main Container -->
-    <div class="max-w-[1600px] mx-auto p-6 space-y-6">
-
-        <!-- KPI Grid Top -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Total Calls -->
-            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
-                <div>
-                    <h3 class="text-textMuted text-xs font-medium mb-1">Total Calls</h3>
-                    <div class="flex items-end justify-between">
-                        <span id="kpi-total-calls" class="text-3xl font-semibold placeholder-glow w-16 h-9 rounded bg-gray-200"></span>
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-surface border-r border-bordercolor flex flex-col sticky top-0 h-screen shadow-sm">
+            <div class="p-6 pb-2">
+                <div class="flex items-center space-x-3 mb-10">
+                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+                        <i class="fa-solid fa-microphone-lines text-sm"></i>
                     </div>
+                    <h1 class="text-sm font-bold text-textMain tracking-tight">JarrettFord</h1>
                 </div>
-            </div>
+                
+                <nav class="space-y-1">
+                    <a href="index.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold bg-primary/10 text-primary transition-all">
+                        <i class="fa-solid fa-chart-line w-5"></i>
+                        <span>Dashboard</span>
+                    </a>
 
-            <!-- Actions Triggered -->
-            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
-                <div>
-                    <h3 class="text-textMuted text-xs font-medium mb-1">Actions Triggered</h3>
-                    <div class="flex items-end justify-between">
-                        <span id="kpi-actions" class="text-3xl font-semibold placeholder-glow w-16 h-9 rounded bg-gray-200"></span>
+                    <!-- AI Calls with Submenu -->
+                    <div class="space-y-1">
+                        <button onclick="toggleSubmenu('aicalls-submenu')" class="flex items-center w-full space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                            <i class="fa-solid fa-phone-volume w-5"></i>
+                            <span>AI Calls</span>
+                            <i id="aicalls-chevron" class="fa-solid fa-chevron-down ml-auto text-[10px] transition-transform duration-200" style="transform: rotate(180deg)"></i>
+                        </button>
+                        <div id="aicalls-submenu" class="pl-11 space-y-1 mt-1">
+                            <a href="aicalls.html?type=inbound" class="block py-2 text-sm text-textMuted hover:text-textMain transition-all font-medium">Inbound</a>
+                            <a href="aicalls.html?type=outbound" class="block py-2 text-sm text-textMuted hover:text-textMain transition-all font-medium">Outbound</a>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Sentiment -->
-            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
-                <div>
-                    <h3 class="text-textMuted text-xs font-medium mb-1">Sentiment</h3>
-                    <div class="flex items-end justify-between">
-                        <span id="kpi-sentiment" class="text-3xl font-semibold text-textMain">-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chart Container -->
-        <div class="bg-surface p-5 rounded-xl border border-bordercolor shadow-sm">
-            <h3 class="text-textMuted text-xs font-medium mb-4">Calls Completed</h3>
-            <div class="w-full h-[280px] relative">
-                <canvas id="callsChart"></canvas>
-            </div>
-        </div>
-
-        <!-- KPI Grid Bottom -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Total Duration -->
-            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-textMuted text-xs font-medium mb-1">Total Duration</h3>
-                        <span id="kpi-total-duration" class="text-2xl font-semibold placeholder-glow w-24 h-8 rounded bg-gray-200 block"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Avg Duration -->
-            <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-textMuted text-xs font-medium mb-1">Average Call duration</h3>
-                        <span id="kpi-avg-duration" class="text-2xl font-semibold placeholder-glow w-24 h-8 rounded bg-gray-200 block"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Date Filters -->
-        <div class="flex items-center justify-end space-x-3 mt-4">
-            <div class="flex items-center space-x-2">
-                <span class="text-xs font-medium text-textMuted">From:</span>
-                <input type="date" id="filter-startDate" class="border border-bordercolor rounded bg-surface px-3 py-1.5 text-xs text-textMain outline-none focus:border-primary transition-colors">
-            </div>
-            <div class="flex items-center space-x-2">
-                <span class="text-xs font-medium text-textMuted">To:</span>
-                <input type="date" id="filter-endDate" class="border border-bordercolor rounded bg-surface px-3 py-1.5 text-xs text-textMain outline-none focus:border-primary transition-colors">
-            </div>
-            <button id="apply-date-filter" class="px-4 py-1.5 bg-primary text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors shadow-sm">Apply</button>
-            <button id="clear-date-filter" class="px-4 py-1.5 bg-gray-100 text-textMain text-xs font-medium rounded hover:bg-gray-200 transition-colors border border-bordercolor shadow-sm">Clear</button>
-        </div>
-
-        <!-- Data Table -->
-        <div class="bg-surface rounded-xl border border-bordercolor shadow-sm overflow-hidden flex flex-col">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-50/50 border-b border-bordercolor text-textMuted text-xs font-medium">
-                            <th class="px-6 py-4 whitespace-nowrap">Agent Name</th>
-                            <th class="px-6 py-4 whitespace-nowrap">Contact Name</th>
-                            <th class="px-6 py-4 whitespace-nowrap">Phone Number</th>
-                            <th class="px-6 py-4 whitespace-nowrap">Date and Time</th>
-                            <th class="px-6 py-4 whitespace-nowrap">Duration</th>
-                            <th class="px-6 py-4 whitespace-nowrap">Actions Triggered</th>
-                            <th class="px-6 py-4 whitespace-nowrap text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body" class="text-sm divide-y divide-bordercolor">
-                        <!-- Skeletons will be generated here -->
-                    </tbody>
-                </table>
+                    <a href="leads.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-users w-5"></i>
+                        <span>Leads</span>
+                    </a>
+                    <a href="appointments.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-calendar-check w-5"></i>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="webchats.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-comment-dots w-5"></i>
+                        <span>Web Chats</span>
+                    </a>
+                    <a href="socialmessages.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-brands fa-facebook w-5"></i>
+                        <span>Social Messages</span>
+                    </a>
+                </nav>
             </div>
             
-            <!-- Pagination -->
-            <div class="px-6 py-4 border-t border-bordercolor flex items-center justify-between text-xs bg-gray-50/30">
-                <span id="pagination-info" class="text-textMuted">Showing ... of ... results</span>
-                <div class="flex items-center space-x-1" id="pagination-controls">
-                    <!-- Controls will be generated here -->
+            <div class="mt-auto p-6 border-t border-bordercolor">
+                <button onclick="logout()" class="w-full flex items-center px-4 py-2.5 text-sm font-medium text-textMuted hover:text-accentRed hover:bg-red-50 rounded-lg transition-all border border-transparent">
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-3"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <header class="mb-8">
+                <h2 class="text-2xl font-bold text-textMain">JarrettFord Dashboard</h2>
+                <p class="text-textMuted text-sm">Monitor your AI call performance</p>
+            </header>
+            
+            <div class="space-y-6">
+                <!-- KPI Grid: 4 Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                    <!-- Total Calls -->
+                    <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-textMuted text-xs font-medium">Total Calls</span>
+                            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <i class="fa-solid fa-phone text-primary text-xs"></i>
+                            </div>
+                        </div>
+                        <span id="kpi-total-calls" class="text-3xl font-bold text-textMain placeholder-glow w-16 h-9 rounded block"></span>
+                    </div>
+
+                    <!-- Web Chats -->
+                    <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-textMuted text-xs font-medium">Web Chats</span>
+                            <div class="w-8 h-8 rounded-lg bg-accentGreen/10 flex items-center justify-center">
+                                <i class="fa-solid fa-comment-dots text-accentGreen text-xs"></i>
+                            </div>
+                        </div>
+                        <span id="kpi-web-chats" class="text-3xl font-bold text-accentGreen placeholder-glow w-16 h-9 rounded block"></span>
+                    </div>
+
+                    <!-- Total Duration -->
+                    <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-textMuted text-xs font-medium">Total Duration</span>
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                <i class="fa-solid fa-clock text-blue-400 text-xs"></i>
+                            </div>
+                        </div>
+                        <span id="kpi-total-duration" class="text-3xl font-bold text-textMain placeholder-glow w-24 h-9 rounded block"></span>
+                    </div>
+
+                    <!-- Actions Triggered -->
+                    <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-textMuted text-xs font-medium">Actions Triggered</span>
+                            <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                                <i class="fa-solid fa-bolt text-orange-400 text-xs"></i>
+                            </div>
+                        </div>
+                        <span id="kpi-actions" class="text-3xl font-bold text-textMain placeholder-glow w-16 h-9 rounded block"></span>
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div class="bg-surface p-5 rounded-xl border border-bordercolor shadow-sm">
+                    <h3 class="text-textMuted text-xs font-medium mb-4">Calls Completed</h3>
+                    <div class="w-full h-[280px] relative">
+                        <canvas id="callsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- KPI Row 2: Duration Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Avg Duration -->
+                    <div class="kpi-card bg-surface p-5 rounded-xl border border-bordercolor shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-textMuted text-xs font-medium">Avg Call Duration</span>
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                <i class="fa-solid fa-hourglass-half text-purple-400 text-xs"></i>
+                            </div>
+                        </div>
+                        <span id="kpi-avg-duration" class="text-2xl font-bold text-textMain placeholder-glow w-24 h-8 rounded block"></span>
+                    </div>
+
+                    <!-- Quick Link to AI Calls -->
+                    <a href="aicalls.html?type=inbound" class="kpi-card bg-primary/10 border border-primary/30 p-5 rounded-xl shadow-sm flex items-center justify-between hover:bg-primary/20 transition-all group">
+                        <div>
+                            <p class="text-textMuted text-xs font-medium mb-1">View All AI Calls</p>
+                            <p class="text-textMain font-bold text-sm">Inbound &amp; Outbound &rarr;</p>
+                        </div>
+                        <i class="fa-solid fa-phone-volume text-primary text-2xl group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
+
                 </div>
             </div>
-        </div>
-        
+        </main>
     </div>
 
     <!-- Modal Overlay -->
@@ -203,6 +222,16 @@
     </div>
 
     <!-- Script -->
-    <script src="app.js"></script>
+    <script src="app.js?v=5"></script>
+    <script>
+        function toggleSubmenu(id) {
+            const menu = document.getElementById(id);
+            const chevron = document.getElementById('aicalls-chevron');
+            menu.classList.toggle('hidden');
+            if (chevron) {
+                chevron.style.transform = menu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+        }
+    </script>
 </body>
 </html>

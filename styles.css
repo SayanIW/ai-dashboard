@@ -1,18 +1,38 @@
-/* Custom Styles to extend Tailwind CSS */
+:root {
+    --bg-dark: #09090b;
+    --surface-dark: #121214;
+    --surface-lighter: #1c1c1f;
+    --primary-purple: #8b5cf6;
+    --primary-glow: rgba(139, 92, 246, 0.2);
+    --accent-lime: #bef264;
+    --text-white: #ffffff;
+    --text-muted: #a1a1aa;
+    --border-color: #27272a;
+}
 
 body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(190, 242, 100, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* Base interactive element transition */
 .kpi-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(24, 24, 27, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    transform: translateY(-4px);
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 20px var(--primary-glow);
 }
 
 /* Elegant Scrollbar */
@@ -26,43 +46,54 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #3f3f46;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #52525b;
 }
 
 /* Skeleton animation for loading states */
 @keyframes placeholderGlow {
-    0% {
-        background-color: #f1f5f9;
-    }
-    50% {
-        background-color: #e2e8f0;
-    }
-    100% {
-        background-color: #f1f5f9;
-    }
+    0% { background-color: #0d0d0f; }
+    50% { background-color: #1a1a1d; }
+    100% { background-color: #0d0d0f; }
 }
 
 .placeholder-glow {
     animation: placeholderGlow 2s infinite ease-in-out;
     color: transparent !important;
     user-select: none;
+    border-radius: 4px;
 }
 
 .placeholder-glow * {
     visibility: hidden;
 }
 
-/* Custom Checkbox or specific small highlights if needed */
-.action-btn {
-    transition: all 0.2s ease;
+/* Glassmorphism sidebar */
+aside {
+    background: rgba(18, 18, 20, 0.8) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
-.action-btn:hover {
-    color: #2563EB;
-    background-color: #eff6ff;
+/* Table styles for dark mode */
+thead, thead tr {
+    background-color: #8b5cf6 !important;
+}
+
+th {
+    color: white !important;
+    text-transform: uppercase;
+    font-size: 10px !important;
+    letter-spacing: 0.1em;
+    padding: 12px 24px !important;
+    font-weight: 700 !important;
+    border: none !important;
+}
+
+tbody tr:hover {
+    background-color: rgba(139, 92, 246, 0.05) !important;
 }

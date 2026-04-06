@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Messages - JarrettFord</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6',
+                        surface: '#18181b',
+                        background: '#09090b',
+                        bordercolor: '#27272a',
+                        textMain: '#ffffff',
+                        textMuted: '#a1a1aa',
+                        accentGreen: '#bef264',
+                        accentRed: '#ef4444'
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body class="bg-background text-textMain min-h-screen font-sans antialiased text-sm">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-surface border-r border-bordercolor flex flex-col sticky top-0 h-screen shadow-sm">
+            <div class="p-6 pb-2">
+                <div class="flex items-center space-x-3 mb-10">
+                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+                        <i class="fa-solid fa-microphone-lines text-sm"></i>
+                    </div>
+                    <h1 class="text-sm font-bold text-textMain tracking-tight">JarrettFord</h1>
+                </div>
+
+                <nav class="space-y-1">
+                    <a href="index.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-chart-line w-5"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <!-- AI Calls with Submenu -->
+                    <div class="space-y-1">
+                        <button onclick="toggleSubmenu('aicalls-submenu')" class="flex items-center w-full space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                            <i class="fa-solid fa-phone-volume w-5"></i>
+                            <span>AI Calls</span>
+                            <i id="aicalls-chevron" class="fa-solid fa-chevron-down ml-auto text-[10px] transition-transform duration-200" style="transform: rotate(180deg)"></i>
+                        </button>
+                        <div id="aicalls-submenu" class="pl-11 space-y-1 mt-1">
+                            <a href="aicalls.html?type=inbound" class="block py-2 text-sm text-textMuted hover:text-textMain transition-all font-medium">Inbound</a>
+                            <a href="aicalls.html?type=outbound" class="block py-2 text-sm text-textMuted hover:text-textMain transition-all font-medium">Outbound</a>
+                        </div>
+                    </div>
+
+                    <a href="leads.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-users w-5"></i>
+                        <span>Leads</span>
+                    </a>
+                    <a href="appointments.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-calendar-check w-5"></i>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="webchats.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-comment-dots w-5"></i>
+                        <span>Web Chats</span>
+                    </a>
+                    <a href="socialmessages.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-semibold bg-blue-500/10 text-blue-400 transition-all">
+                        <i class="fa-brands fa-facebook w-5"></i>
+                        <span>Social Messages</span>
+                    </a>
+                    <a href="agents.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-textMuted hover:text-textMain hover:bg-gray-50/10 transition-all">
+                        <i class="fa-solid fa-robot w-5"></i>
+                        <span>AI Agents</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="mt-auto p-6 border-t border-bordercolor">
+                <button onclick="logout()" class="w-full flex items-center px-4 py-2.5 text-sm font-medium text-textMuted hover:text-accentRed transition-all">
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-3"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-8 overflow-y-auto">
+            <div class="max-w-[1600px] mx-auto space-y-6">
+
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-1">
+                            <div class="w-8 h-8 rounded-lg bg-[#1877F2] flex items-center justify-center text-white shadow-sm">
+                                <i class="fa-brands fa-facebook-f text-sm"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-textMain">Social Messages</h2>
+                        </div>
+                        <p class="text-textMuted text-sm">Facebook Messenger conversations via HighLevel</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-textMuted pointer-events-none"></i>
+                            <input type="text" id="social-search" placeholder="Search messages..." class="pl-10 pr-4 py-2 bg-surface border border-bordercolor rounded-lg text-sm focus:outline-none focus:border-blue-500 w-64 shadow-sm transition-all text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="bg-surface rounded-xl border border-bordercolor shadow-sm overflow-hidden flex flex-col">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead style="background-color: #1877F2 !important; color: #ffffff !important;">
+                                <tr style="background-color: #1877F2 !important; color: #ffffff !important;" class="border-b border-bordercolor text-xs font-bold uppercase tracking-wider">
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Name</th>
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Contact Name</th>
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Email</th>
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Phone</th>
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap">Last Message</th>
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap text-center">Unread</th>
+                                    <th style="background-color: #1877F2 !important; color: #ffffff !important;" class="px-6 py-4 whitespace-nowrap text-right">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="social-table-body" class="text-sm divide-y divide-bordercolor">
+                                <!-- Skeletons rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-bordercolor flex items-center justify-between text-xs bg-gray-50/0">
+                        <span id="pagination-info" class="text-textMuted">Showing ... of ... results</span>
+                        <div class="flex items-center space-x-1" id="pagination-controls"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Message Details Modal -->
+    <div id="message-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-surface border border-bordercolor w-full max-w-2xl max-h-[85vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden m-4">
+            <div class="px-6 py-4 border-b border-bordercolor flex items-center justify-between bg-surface sticky top-0 z-10">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-brands fa-facebook-messenger text-[#1877F2] text-lg"></i>
+                        <h3 id="modal-user-name" class="text-lg font-bold text-textMain tracking-tight">Chat History</h3>
+                    </div>
+                    <p id="modal-user-info" class="text-xs text-textMuted mt-0.5"></p>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-textMuted hover:text-textMain transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="modal-messages" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-background/30">
+                <div class="flex flex-col items-center justify-center py-12 text-textMuted space-y-4">
+                    <div class="w-8 h-8 border-3 border-[#1877F2] border-t-transparent rounded-full animate-spin"></div>
+                    <p class="text-xs">Fetching conversation history...</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-bordercolor bg-surface/50 text-[10px] text-textMuted flex justify-between italic">
+                <span>Facebook Messenger via HighLevel API</span>
+                <span id="modal-message-count"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="socialmessages.js"></script>
+    <script>
+        function toggleSubmenu(id) {
+            const menu = document.getElementById(id);
+            const chevron = document.getElementById('aicalls-chevron');
+            menu.classList.toggle('hidden');
+            if (chevron) {
+                chevron.style.transform = menu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+        }
+        window.logout = function () {
+            localStorage.removeItem('isAuthenticated');
+            window.location.href = 'login.html';
+        };
+    </script>
+</body>
+</html>

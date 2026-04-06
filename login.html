@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice AI Dashboard - Login</title>
+    <title>JarrettFord - Login</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,12 +11,12 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2563EB',
-                        surface: '#FFFFFF',
-                        background: '#f8fafc',
-                        bordercolor: '#e2e8f0',
-                        textMain: '#0f172a',
-                        textMuted: '#64748b'
+                        primary: '#8b5cf6',
+                        surface: '#18181b',
+                        background: '#09090b',
+                        bordercolor: '#27272a',
+                        textMain: '#ffffff',
+                        textMuted: '#a1a1aa'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -27,6 +27,8 @@
     </script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS for global theme background -->
+    <link rel="stylesheet" href="styles.css">
     <style>
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -36,30 +38,40 @@
         .animate-shake {
             animation: shake 0.4s ease-in-out;
         }
+        
+        .login-card {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
     </style>
 </head>
 <body class="bg-background text-textMain min-h-screen font-sans antialiased flex items-center justify-center p-6">
 
-    <div id="login-container" class="bg-surface p-8 rounded-2xl border border-bordercolor shadow-xl w-full max-w-sm transition-transform">
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-textMain mb-2">Welcome Back</h1>
-            <p class="text-sm text-textMuted">Sign in to Voice AI Dashboard</p>
+    <div id="login-container" class="login-card p-10 rounded-2xl border border-bordercolor shadow-2xl w-full max-w-sm transition-transform scale-100">
+        <div class="text-center mb-10">
+             <div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg mx-auto mb-4">
+                <i class="fa-solid fa-microphone-lines text-xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-textMain mb-1 tracking-tight">Welcome Back</h1>
+            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1">JarrettFord</p>
+            <p class="text-sm text-textMuted">Sign in to your dashboard</p>
         </div>
 
-        <form id="login-form" class="space-y-5">
+        <form id="login-form" class="space-y-6">
             <div>
-                <label for="username" class="block text-sm font-medium text-textMain mb-1.5">Username</label>
-                <input type="text" id="username" class="w-full border border-bordercolor rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-gray-50/50" placeholder="Enter username" required>
+                <label for="username" class="block text-xs font-semibold text-textMuted uppercase tracking-wider mb-2">Username</label>
+                <input type="text" id="username" class="w-full bg-surface/50 border border-bordercolor rounded-xl px-4 py-3 text-sm text-textMain placeholder:text-textMuted/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all" placeholder="Enter username" required>
             </div>
             
             <div>
-                <label for="password" class="block text-sm font-medium text-textMain mb-1.5">Password</label>
-                <input type="password" id="password" class="w-full border border-bordercolor rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-gray-50/50" placeholder="••••••••" required>
+                <label for="password" class="block text-xs font-semibold text-textMuted uppercase tracking-wider mb-2">Password</label>
+                <input type="password" id="password" class="w-full bg-surface/50 border border-bordercolor rounded-xl px-4 py-3 text-sm text-textMain placeholder:text-textMuted/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all" placeholder="••••••••" required>
             </div>
 
-            <div id="error-msg" class="text-red-500 text-xs hidden text-center font-medium bg-red-50 py-2 rounded">Invalid username or password.</div>
+            <div id="error-msg" class="text-accentRed text-xs hidden text-center font-medium bg-accentRed/10 py-2.5 rounded-lg border border-accentRed/20">Invalid username or password.</div>
 
-            <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors mt-2 shadow-sm">Sign In</button>
+            <button type="submit" class="w-full bg-primary hover:bg-violet-600 text-white font-bold py-3 rounded-xl transition-all mt-4 shadow-lg shadow-primary/20 active:scale-[0.98]">Sign In</button>
         </form>
     </div>
 
